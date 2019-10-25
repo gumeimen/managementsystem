@@ -2,8 +2,13 @@ package com.gmm.item.example.ms.controller;
 
 import com.gmm.item.example.ms.model.User;
 import com.gmm.item.example.ms.service.impl.UserServiceImpl;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -15,6 +20,7 @@ import java.util.List;
  **/
 @RestController
 @RequestMapping("user")
+@Api(tags = "用户模块接口")
 public class UserController{
 
     @Autowired
@@ -27,18 +33,21 @@ public class UserController{
     * @Author: gmm
     * @Date: 2019-10-24 
     */ 
-    @GetMapping(value ="/findById")
-    public User findByIdUser(@RequestParam("id") Integer id){
-        return userService.getById(id);
+    @GetMapping(value ="/{uId}")
+    @ApiOperation(value = "获取单个用户信息", notes = "根据url的id来获取用户详细信息")
+    @ApiImplicitParam(name = "uId",value = "编号", required = true,paramType = "path")
+    public User findByIdUser(@PathVariable @Valid Integer uId){
+        return userService.getById(uId);
     }
     /** 
-    * @Description:  
+    * @Description: 查询所有用户信息；
     * @Param: [] 
     * @return: java.util.List<com.gmm.demo.model.User> 
     * @Author: gmm
     * @Date: 2019-10-24
     */ 
     @GetMapping("/findAll")
+    @ApiOperation(value = "获取用户详细信息", notes = "查询用户信息")
     public List<User> findAllUser(){
         return userService.selectUserList();
     }
